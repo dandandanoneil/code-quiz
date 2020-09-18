@@ -8,6 +8,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
+    <!-- Bootswatch Theme (Spacelab) -->
+    <link rel="stylesheet" href="https://bootswatch.com/4/spacelab/bootstrap.min.css">
+
     <title>Code Quiz!</title>
   </head>
   <body>
@@ -16,9 +19,19 @@
             <h1 class="header, display-4">Code Quiz!</h1>
             <p class="lead">This is a simple quiz to test your programming knowledge. Answer as many questions as you can before the time runs out - but be careful, because a wrong answer pushes the timer closer to 0!</p>
             <p id="start-message">Click below to get started</p>
-            <a class="btn btn-primary btn-lg" id="start-button" role="button">Start</a>
-            <a class="btn btn-success btn-lg" id="high-scores-button" href="high-scores.html" role="button">View High Scores</a>
+            <div id="buttons">
+              <a class="btn btn-primary btn-lg" id="start-button" role="button">Start</a>
+              <a class="btn btn-success btn-lg" id="high-scores-button" href="high-scores.html" role="button">View High Scores</a>
+            </div>
         </div>
+        <div class="question-card">
+          <div id="question" index=""></div>
+          <div id="choices"></div>
+        </div>
+        <div class="result-message"></div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+          </div>
     </div>
 
     <!-- JavaScript from Bootstrap's template -->
