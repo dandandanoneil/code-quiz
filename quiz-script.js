@@ -7,22 +7,19 @@ const questionCard = document.querySelector("#question-card");
 const resultMessage = document.querySelector("#result-message");
 const progressBar = document.querySelector(".progress-bar");
 
-// Grab & name elements from high-scores.html
-const scoreList = document.querySelector("#score-list");
-
-// Grab & name the buttons & choices divs from both so I can make an event listener that won't crash on one page
+// Grab & name the buttons & choices divs 
 const buttons = document.querySelector("#buttons");
 const choices = document.querySelector("#choices");
 
-// Set up the variables we'll use in the timer on index.html
+// Set up the variables we'll use in the timer
 let timeLeft;
 
 // Array of questions for the quiz. Each question is an object with a question string, choices array, and answer string as keys. Answer is the correct answer, choices are the other wrong answers. This list will be shuffled at the start of the quiz, and the possible answers will be shuffled before that question is displayed
 let questionsArr = [
     {
         question: "Where do we put a JavaScript <script> tag?",
-        choices: ["The <head> section", "Either the <head> or <body> sections"],
-        answer: "The <body> section"
+        choices: ["The <head> section", "The <body> section"],
+        answer: "Either the <head> or <body> sections"
     },
     {
         question: "What is the correct way to link to an external JavaScript file?",
@@ -30,7 +27,7 @@ let questionsArr = [
         answer: "<script src=\"script.js\">"
     },
     {
-        question: "What is a correct way to write a comment in JavaScript?",
+        question: "What is correct when writing a comment in JavaScript?",
         choices: ["*/ Comment \\*", "<!-- Comment -->"],
         answer: "// Comment"
     },
@@ -82,11 +79,7 @@ let questionsArr = [
 ];
 
 
-// Initial code to load high scores on high-scores.html - this won't do anything on index.html
-renderScoreList()
-
-
-// Start & Clear Button Code
+// Start Button Code
 buttons.addEventListener("click", function(event) {
     let buttonID = event.target.id;
     
@@ -105,16 +98,6 @@ choices.addEventListener("click", function(event) {
     // Code to differentiate which button they clicked, whether it matches the correct answer, etc.
 });
 
-
-function renderScoreList() {
-    let highScores = localStorage.getItem("scores");
-
-    if(highScores == null) { 
-        console.log("No high scores")
-    } else {
-        console.log(highScores);
-    }
-}
 
 function renderQuiz() {
     console.log("render quiz");
