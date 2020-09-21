@@ -1,18 +1,24 @@
 // Grab & name elements from index.html
+const header = document.getElementById("header");
 const instructions = document.getElementById("instructions");
-const startBtn = document.getElementById("start-button");
+const startButton = document.getElementById("start-button");
 const highScoresButton = document.getElementById("high-scores-button");
-const buttons = document.querySelector("#buttons");
 const timer = document.getElementById("timer");
-const questionCard = document.querySelector(".question-card");
-const choices = document.querySelector("#choices");
-const submitButton = document.querySelector("#submit");
-const resultMessage = document.querySelector("#result-message");
+const questionCard = document.getElementById("question-card");
+const question = document.getElementById("question");
+const choices = document.getElementById("choices");
+const submitButton = document.getElementById("submit");
+const retakeButton = document.getElementById("retake");
+const resultMessage = document.getElementById("result-message");
+const progressDiv = document.querySelector(".progress");
 const progressBar = document.querySelector(".progress-bar");
 
 
 // Set up the variables we'll use in the timer
 let timeLeft;
+let interval;
+let timerDisplay;
+
 // Set the question number at -1 so that the first time nextQuestion() is called, it will use the question at position [0]
 let qNumber = -1;
 
@@ -81,37 +87,9 @@ let questionsArr = [
 ];
 
 
-// Start Button listener
-buttons.addEventListener("click", function(event) {
-    let buttonID = event.target.id;
-    
-    if(buttonID === "start-button") {
-        startQuiz();
-    }
-    if(buttonID === "clear-button") {
-        if(confirm("Are you sure you want to clear all the accumulated high scores?")) {
-            console.log("scores cleared")
-        }
-    } 
-});
-
-// Quiz choices button listener
-choices.addEventListener("click", function(event) {
-    let userChoice = event.target.textContent;
-    let answer = questionsArr[qNumber].answer;
-
-    console.log(userChoice, answer);
-
-    if(userChoice == answer) {
-        rightAnswer();
-    } else {
-        wrongAnswer();
-    }
-});
-
-// Submit button listener
-submitButton.addEventListener("click", function(event) {
-    const input = document.querySelector("#input");
+// Called when the user hits 'submit' on their score
+function saveScore() {
+    let input = document.querySelector("#input");
     let initials = input.value.toUpperCase();
 
     // Convert the initials and score into an object    
@@ -131,31 +109,95 @@ submitButton.addEventListener("click", function(event) {
 
     // Redirect to the high scores page
     window.location.replace("high-scores.html");
-});
+}
+
+function retakeQuiz() {
+    // Hide submit & retake buttons, show progress bar
+    submitButton.classList.add("d-none");
+    submitButton.classList.remove("m-2");
+    retakeButton.classList.add("d-none");
+    // Show progress bar, question, and choices
+    progressDiv.classList.remove("d-none");
+    question.classList.remove("d-none");
+    choices.classList.remove("d-none");
+    
+    // Name and remove input & score announcement
+    let input = document.getElementById("input");
+    questionCard.removeChild(input);
+    let result = document.getElementById("result");
+    questionCard.removeChild(result);
+
+    // Rebuild question card
+    // let newQuestion = document.createElement("h2");
+    // newQuestion.id = "question";
+    // questionCard.append(newQuestion);
+    
+    // let newChoices = document.createElement("div");
+    // newChoices.id = "choices";
+    // newChoices.classList.add("btn-group-vertical");
+    // questionCard.append(newChoices);
+
+    // Restart timer
+    timeLeft = 90;
+    startTimer();
+    
+    // Shuffle the questions, then call nextQuestion to display the first question & its choices
+    questionsArr.sort(() => Math.random() - 0.5);
+    qNumber = -1;
+    nextQuestion();
+}
 
 function startQuiz() {
     // Hide the instructions, and the 'start' and 'view high scores' buttons
+    header.classList.add("d-none");
     instructions.innerText = " ";
-    startBtn.classList.add("d-none");
+    startButton.classList.add("d-none");
     highScoresButton.classList.add("d-none");
+    progressDiv.classList.remove("d-none");
     
-    // Show timer & set time to 01:30
-    timer.classList.add("display-4","w-25","border","border-warning","text-center","mb-3");
+    // Show timer & start timer
+    timer.classList.add("display-4","w-25","border","border-danger","text-center","mb-3");
     timeLeft = 90;
-    let timerDisplay = "0" + (Math.floor(timeLeft / 60)) + ": " ;
-    if((timeLeft % 60) >= 10) {
-        timerDisplay = timerDisplay + (timeLeft % 60);
-    } else {
-        timerDisplay += timerDisplay + "0" + (timeLeft % 60);
-    }
-    timer.textContent = timerDisplay;
-
-    console.log("start timer");
-    // Call a function to start the timer here? Maybe all that above code goes in the startTimer function?
-
+    startTimer();
+    
     // Shuffle the questions, then call nextQuestion to display the first question & its choices
     questionsArr.sort(() => Math.random() - 0.5);
     nextQuestion();
+}
+
+function startTimer() {
+    renderTime();
+
+    interval = setInterval(function() {
+        timeLeft = timeLeft - 1;
+        renderTime();
+      }, 1000);
+}
+
+function renderTime() {
+    if (timeLeft <= 0) {
+        stopTimer();
+        timeLeft = 0;
+        endGame();
+    }
+
+    if(timeLeft >= 60) {
+        timerDisplay = "0" + (Math.floor(timeLeft / 60)) + ":" ;
+    } else {
+        timerDisplay = "00: " ;
+    }
+
+    if((timeLeft % 60) >= 10) {
+        timerDisplay += (timeLeft % 60);
+    } else {
+        timerDisplay += "0" + (timeLeft % 60);
+    }
+
+    timer.textContent = timerDisplay;
+}
+
+function stopTimer() {
+    clearInterval(interval);
 }
 
 function nextQuestion() {
@@ -163,7 +205,7 @@ function nextQuestion() {
     qNumber ++;
     // Check to make sure we haven't run out of questions
     if (qNumber >= questionsArr.length) { 
-        endGame("You answered all the questions!");
+        endGame();
         return;
     }
     // If not, display the question & set the question div's index to match
@@ -191,31 +233,22 @@ function nextQuestion() {
     progressBar.style = "width: " + ((qNumber + 1) / questionsArr.length * 100) + "%";
 }
 
-function rightAnswer() {
-    console.log("You got question number", (qNumber + 1), "correct");
-    nextQuestion();
-}
-
-function wrongAnswer() {
-    console.log("You got question number", (qNumber + 1), "wrong");
-    console.log(timeLeft);
-    timeLeft -= 10;
-    console.log(timeLeft);
-    nextQuestion();
-}
-
-function endGame(endMessage) {
+function endGame() {
+    stopTimer();
+    
+    // Hide question, answers, and progress bar
     question.classList.add("d-none");
-    timer.classList.add("d-none");
-    progressBar.classList.add("d-none");
-    questionCard.removeChild(choices);
+    choices.classList.add("d-none");
+    progressDiv.classList.add("d-none");
 
-    // Create elements to announce their score & ask for their initials & append them to the questionCard element
-    let score = document.createElement("h5");
-    score.textContent = "Your final score is " + timeLeft;
-    score.classList.add("m-2");
-    questionCard.append(score);
+    // Create element to announce their score & append to the questionCard element
+    let result = document.createElement("h5");
+    result.textContent = "Your final score is " + timeLeft;
+    result.id = "result";
+    result.classList.add("m-2");
+    questionCard.append(result);
 
+    // Create element to ask for their initials & append to the questionCard element
     let initialsInput = document.createElement("input");
     initialsInput.type = "text";
     initialsInput.id = "input";
@@ -223,10 +256,30 @@ function endGame(endMessage) {
     initialsInput.classList.add("m-2");
     questionCard.append(initialsInput)
 
+    // Show submit button & start button with modified text
     submitButton.classList.remove("d-none");
     submitButton.classList.add("m-2");
+    retakeButton.classList.remove("d-none");
 
     // Create a string for their score & add it in the correct position to the scores array in localStorage, or create a new scores array
     // Save that scores list back to localStorage
     console.log("the game is over");
 }
+
+// Quiz choices button listener
+choices.addEventListener("click", function(event) {
+    let userChoice = event.target.textContent;
+    let answer = questionsArr[qNumber].answer;
+
+    console.log(userChoice, answer);
+
+    if(userChoice != answer) {
+        timeLeft -= 15;
+        renderTime();
+    }
+    nextQuestion();
+});
+
+startButton.addEventListener("click", startQuiz);
+submitButton.addEventListener("click", saveScore);
+retakeButton.addEventListener("click", retakeQuiz);
