@@ -4,7 +4,7 @@ const scoreList = document.querySelector("#score-list");
 // Grab & name the buttons  
 const clearButton = document.querySelector("#clear-button");
 
-// Dummy scores in localStorage for testing
+// Dummy scores in localStorage  - uncomment for testing
 localStorage.setItem("scores", JSON.stringify(["example zero", "example one", "example two"]));
 
 // Initial code to load high scores
