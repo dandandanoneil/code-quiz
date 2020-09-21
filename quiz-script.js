@@ -25,24 +25,19 @@ let qNumber = -1;
 // Array of question objects for the quiz.
 let questionsArr = [
     {
-        question: "Where do we put a JavaScript <script> tag?",
-        choices: ["The <head> section", "The <body> section"],
-        answer: "Either the <head> or <body> sections"
+        question: "In what section do we put a <script> tag?",
+        choices: ["<head>", "<body>"],
+        answer: "Either <head> or <body>"
     },
     {
         question: "What is the correct way to link to an external JavaScript file?",
-        choices: ["<script href=\"script.js\">", "<script \"script.js\">", "<script> script.js </script>"],
+        choices: ["<script href=\"script.js\">", "script =  \"script.js\"", "<script> script.js </script>"],
         answer: "<script src=\"script.js\">"
     },
     {
-        question: "What is correct when writing a comment in JavaScript?",
+        question: "Which is a comment in JavaScript?",
         choices: ["*/ Comment \\*", "<!-- Comment -->"],
         answer: "// Comment"
-    },
-    {
-        question: "What is the correct way to write an alert in JavaScript?",
-        choices: ["alert.message(\"Alert Message\")", "alert {\"Alert Message\"}", "alert[\"Alert Message\"]"],
-        answer: "alert(\"Alert Message\")"
     },
     {
         question: "What buttons would you expect to see in a confirm box?",
@@ -51,7 +46,7 @@ let questionsArr = [
     },
     {
         question: "What is the correct way to call a function?",
-        choices: ["call.myFunction()", "call myFunction{}", "call function myFunction()"],
+        choices: ["myFunction.call()", "call myFunction", "function myFunction()"],
         answer: "myFunction()"
     },
     {
@@ -62,27 +57,27 @@ let questionsArr = [
     {
         question: "Which of these means equal in JavaScript?",
         choices: ["?=?", "!=", ">="],
-        answer: "=="
+        answer: "==="
     },
     {
         question: "What is the correct way to write an array in JavaScript?",
-        choices: ["let array = ('one', 'two', three')", "let array = {'one', 'two', three'}"],
-        answer: "let array = ['one', 'two', three']"
+        choices: ["('one', 'two', three')", "{'one', 'two', three'}"],
+        answer: "['one', 'two', three']"
     },
     {
         question: "What is the correct way to start an if statement?",
-        choices: ["if index>0, then", "if{index > 0}", "if index>0, then", "if[index > 0]"],
-        answer: "if(index > 0)"
+        choices: ["if index = 0, then", "if {index = 0}", "if index > 0, then", "if [index > 0]"],
+        answer: "if (index > 0)"
     },
     {
         question: "What is the correct way to start a while loop?",
-        choices: ["while index>0, then", "while{index > 0}", "while[index > 0]"],
-        answer: "while(index > 0)"
+        choices: ["while index > 0, then", "while {index > 0}", "while [index > 0]"],
+        answer: "while (index > 0)"
     },
     {
         question: "What is the correct way to start a for loop?",
-        choices: ["for index = 0, index < 10, index++", "for (index = 0) (index < 10) (index +)", "for index = 0; [index < 10]"],
-        answer: "for (index = 0; index < 10; index++)"
+        choices: ["for i = 0, i < 10, i++", "for (i < 10)", "for i = 0, while [i < 10], i++"],
+        answer: "for (i = 0; i < 10; i++)"
     }
 ];
 
@@ -108,7 +103,25 @@ function saveScore() {
     localStorage.setItem("scores", JSON.stringify(highScores));
 
     // Redirect to the high scores page
-    window.location.replace("high-scores.html");
+    window.location.href = "high-scores.html";
+}
+
+function startQuiz() {
+    // Hide the instructions, and the 'start' and 'view high scores' buttons
+    header.classList.add("d-none");
+    instructions.innerText = " ";
+    startButton.classList.add("d-none");
+    highScoresButton.classList.add("d-none");
+    progressDiv.classList.remove("d-none");
+    
+    // Show timer & start timer
+    timer.classList.add("display-4","w-25","border","border-danger","text-center","mb-3");
+    timeLeft = 90;
+    startTimer();
+    
+    // Shuffle the questions, then call nextQuestion to display the first question & its choices
+    questionsArr.sort(() => Math.random() - 0.5);
+    nextQuestion();
 }
 
 function retakeQuiz() {
@@ -127,16 +140,6 @@ function retakeQuiz() {
     let result = document.getElementById("result");
     questionCard.removeChild(result);
 
-    // Rebuild question card
-    // let newQuestion = document.createElement("h2");
-    // newQuestion.id = "question";
-    // questionCard.append(newQuestion);
-    
-    // let newChoices = document.createElement("div");
-    // newChoices.id = "choices";
-    // newChoices.classList.add("btn-group-vertical");
-    // questionCard.append(newChoices);
-
     // Restart timer
     timeLeft = 90;
     startTimer();
@@ -144,24 +147,6 @@ function retakeQuiz() {
     // Shuffle the questions, then call nextQuestion to display the first question & its choices
     questionsArr.sort(() => Math.random() - 0.5);
     qNumber = -1;
-    nextQuestion();
-}
-
-function startQuiz() {
-    // Hide the instructions, and the 'start' and 'view high scores' buttons
-    header.classList.add("d-none");
-    instructions.innerText = " ";
-    startButton.classList.add("d-none");
-    highScoresButton.classList.add("d-none");
-    progressDiv.classList.remove("d-none");
-    
-    // Show timer & start timer
-    timer.classList.add("display-4","w-25","border","border-danger","text-center","mb-3");
-    timeLeft = 90;
-    startTimer();
-    
-    // Shuffle the questions, then call nextQuestion to display the first question & its choices
-    questionsArr.sort(() => Math.random() - 0.5);
     nextQuestion();
 }
 
@@ -260,18 +245,12 @@ function endGame() {
     submitButton.classList.remove("d-none");
     submitButton.classList.add("m-2");
     retakeButton.classList.remove("d-none");
-
-    // Create a string for their score & add it in the correct position to the scores array in localStorage, or create a new scores array
-    // Save that scores list back to localStorage
-    console.log("the game is over");
 }
 
 // Quiz choices button listener
 choices.addEventListener("click", function(event) {
     let userChoice = event.target.textContent;
     let answer = questionsArr[qNumber].answer;
-
-    console.log(userChoice, answer);
 
     if(userChoice != answer) {
         timeLeft -= 15;
