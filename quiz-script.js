@@ -16,7 +16,7 @@ let timeLeft;
 // Set the question number at -1 so that the first time nextQuestion() is called, it will use the question at position [0]
 let qNumber = -1;
 
-// Array of questions for the quiz. Each question is an object with a question string, choices array, and answer string as keys. Answer is the correct answer, choices are the other wrong answers. This list will be shuffled at the start of the quiz, and the possible answers will be shuffled before that question is displayed
+// Array of question objects for the quiz.
 let questionsArr = [
     {
         question: "Where do we put a JavaScript <script> tag?",
@@ -111,7 +111,26 @@ choices.addEventListener("click", function(event) {
 
 // Submit button listener
 submitButton.addEventListener("click", function(event) {
-    console.log("score submitted");
+    const input = document.querySelector("#input");
+    let initials = input.value.toUpperCase();
+
+    // Convert the initials and score into an object    
+    let newScore = {userName:initials, userScore:timeLeft.toString()};
+    
+    // Get high scores from localStorage and convert to an array
+    let highScores = JSON.parse(localStorage.getItem("scores"));
+    if(highScores === null) { highScores = []; }
+
+    highScores.push(newScore);
+
+    // Resort the array by score, descending, and save to localStorage
+    highScores.sort(function compare(a, b) {
+        return parseInt(b.userScore) - parseInt(a.userScore);
+    });
+    localStorage.setItem("scores", JSON.stringify(highScores));
+
+    // Redirect to the high scores page
+    window.location.replace("high-scores.html");
 });
 
 function startQuiz() {
@@ -199,6 +218,7 @@ function endGame(endMessage) {
 
     let initialsInput = document.createElement("input");
     initialsInput.type = "text";
+    initialsInput.id = "input";
     initialsInput.placeholder = "Enter your initials"
     initialsInput.classList.add("m-2");
     questionCard.append(initialsInput)

@@ -5,7 +5,11 @@ const scoreList = document.querySelector("#score-list");
 const clearButton = document.querySelector("#clear-button");
 
 // Dummy scores in localStorage  - uncomment for testing
-localStorage.setItem("scores", JSON.stringify(["example zero", "example one", "example two"]));
+// localStorage.setItem("scores", JSON.stringify(
+//     [{userName:"Dan1", userScore:"30"}, 
+//     {userName:"Dan2", userScore:"2"}, 
+//     {userName:"Dan3", userScore:"12"}, 
+//     {userName:"Dan4", userScore:"-20"}]));
 
 // Initial code to load high scores
 renderScoreList()
@@ -28,7 +32,7 @@ function renderScoreList() {
     } else {
         for (let i = 0; i < highScores.length; i++) {
             let score = document.createElement("div");
-            score.innerText = ((i + 1) + ". " + highScores[i])
+            score.innerText = ((i + 1) + ". " + highScores[i].userName + ": " + highScores[i].userScore)
             scoreList.appendChild(score)
         }
         // If there are less than 10 high scores, add empty numbered lines
