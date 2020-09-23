@@ -4,16 +4,17 @@ const scoreList = document.querySelector("#score-list");
 // Grab & name the buttons  
 const clearButton = document.querySelector("#clear-button");
 
-// Dummy scores in localStorage  - uncomment for testing
-// localStorage.setItem("scores", JSON.stringify(
-//    [{ userName:"DHO", userScore:"30" }, 
-//     { userName:"ASB", userScore:"2" }, 
-//     { userName:"JPB", userScore:"12" }, 
-//     { userName:"MSD", userScore:"21" },
-//     { userName: "RLC", userScore: "32" },
-//     { userName: "RLS", userScore: "7" },
-//     { userName: "JDR", userScore: "12" },
-//     { userName: "MSG", userScore: "15" }] ) );
+// // Load dummy scores - uncomment for testing
+//     localStorage.setItem("scores", JSON.stringify(
+//         [{ userName: "RLC", userScore: "32" }, 
+//          { userName: "DHO", userScore: "30" }, 
+//          { userName:"MSD", userScore:"21" },
+//          { userName: "MSG", userScore: "15" }, 
+//          { userName:"JPB", userScore:"12" }, 
+//          { userName: "JDR", userScore: "12" },
+//          { userName: "RLS", userScore: "7" },
+//          { userName: "ASB", userScore: "2" }] ));
+
     
 // Initial code to load high scores
 renderScoreList()
