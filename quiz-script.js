@@ -115,7 +115,7 @@ function startQuiz() {
     progressDiv.classList.remove("d-none");
     
     // Show timer & start timer
-    timer.classList.add("w-50","border","bg-warning", "text-white", "rounded", "text-center","mb-3");
+    timer.classList.add("w-100","border","bg-warning", "text-white", "rounded", "text-center","mb-3");
     timeLeft = 90;
     startTimer();
     
@@ -215,7 +215,7 @@ function nextQuestion() {
         let newButton = document.createElement("button");
         newButton.innerText = answerArray[i];
         newButton.type = "button";
-        newButton.classList.add("btn","btn-lg","btn-info")
+        newButton.classList.add("btn","btn-lg","btn-info");
         choices.appendChild(newButton);
     }
 
@@ -265,18 +265,31 @@ function endGame() {
     }
 }
 
-// Quiz choices button listener
-choices.addEventListener("click", function(event) {
+function choiceMade(event) {
     let userChoice = event.target.textContent;
     let answer = questionsArr[qNumber].answer;
 
-    if(userChoice != answer) {
-        timeLeft -= 15;
+    // If they got it wrong, take 10 seconds off their time & display the result
+    if (userChoice != answer) {
+        resultMessage.classList.add("w-100", "border", "bg-danger", "text-white", "rounded", "text-center", "mb-3")
+        resultMessage.innerText = "Incorrect";
+        timeLeft -= 10;
         renderTime();
+    } else {
+        // If they got it right, display the result
+        resultMessage.classList.add("w-100", "border", "bg-success", "text-white", "rounded", "text-center", "mb-3")
+        resultMessage.innerText = "Correct";
     }
-    nextQuestion();
-});
 
+    nextQuestion();
+    // Wait a moment for the user to see the result, then clear it
+    setTimeout(() => { 
+        resultMessage.classList.remove("w-100", "border", "bg-success", "bg-danger", "text-white", "rounded", "text-center", "mb-3")
+        resultMessage.innerHTML = "";
+    }, 1000);
+}
+
+choices.addEventListener("click", choiceMade);
 startButton.addEventListener("click", startQuiz);
 submitButton.addEventListener("click", saveScore);
 retakeButton.addEventListener("click", retakeQuiz);

@@ -15,9 +15,16 @@
       <div class="col-lg-9">
         <div class="jumbotron md-9 lg-9 xl-9 mt-3">
           <h1 id="header" class="header, display-4">Code Quiz!</h1>
-
-          <div id="timer" style="font-size: 50pt" class=""><!-- Timer will display here --></div>  
-
+          
+          <div class="row">
+            <div class="col-6"> <!-- Timer-->
+              <div id="timer" style="font-size: 50pt" class=""></div>
+            </div>
+            <div class="col-6"> <!-- Correct or Incorrect -->
+              <div id="result-message" style="font-size: 50pt" class=""></div>
+            </div>
+          </div>
+          
           <p class="lead" id="instructions">This is a simple quiz to test your programming knowledge. Answer as many questions about JavaScript as you can before the time runs out - but be careful, because a wrong answer pushes the timer closer to 0!</p>
 
           <div id="buttons">
@@ -35,9 +42,6 @@
           </div>
         </div>
 
-        <h5 id="result-message">
-          <!-- "Correct" or "Incorrect" will display here -->
-        </h5>
 
         <button id="submit" type="button" class="btn btn-success d-none">Submit Score</button>
         <button id="retake" type="button" class="btn btn-primary d-none">Retake Quiz</button>
