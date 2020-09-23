@@ -115,7 +115,7 @@ function startQuiz() {
     progressDiv.classList.remove("d-none");
     
     // Show timer & start timer
-    timer.classList.add("display-4","w-25","border","border-danger","text-center","mb-3");
+    timer.classList.add("w-50","border","bg-warning", "text-white", "rounded", "text-center","mb-3");
     timeLeft = 90;
     startTimer();
     
@@ -136,12 +136,17 @@ function retakeQuiz() {
     
     // Name and remove input & score announcement
     let input = document.getElementById("input");
-    questionCard.removeChild(input);
+    if (input) {
+        questionCard.removeChild(input);
+    }
     let result = document.getElementById("result");
     questionCard.removeChild(result);
 
     // Restart timer
     timeLeft = 90;
+    timer.classList.remove("bg-danger");
+    timer.classList.remove("bg-success");
+    timer.classList.add("bg-warning");
     startTimer();
     
     // Shuffle the questions, then call nextQuestion to display the first question & its choices
@@ -228,23 +233,36 @@ function endGame() {
 
     // Create element to announce their score & append to the questionCard element
     let result = document.createElement("h5");
-    result.textContent = "Your final score is " + timeLeft;
+    result.textContent = "Your final score is " + timeLeft + "!";
     result.id = "result";
     result.classList.add("m-2");
     questionCard.append(result);
 
     // Create element to ask for their initials & append to the questionCard element
-    let initialsInput = document.createElement("input");
-    initialsInput.type = "text";
-    initialsInput.id = "input";
-    initialsInput.placeholder = "Enter your initials"
-    initialsInput.classList.add("m-2");
-    questionCard.append(initialsInput)
+    if (timeLeft > 0) {
+        let initialsInput = document.createElement("input");
+        initialsInput.type = "text";
+        initialsInput.id = "input";
+        initialsInput.placeholder = "Enter your initials"
+        initialsInput.classList.add("m-2");
+        questionCard.append(initialsInput)
+    }
 
-    // Show submit button & start button with modified text
-    submitButton.classList.remove("d-none");
-    submitButton.classList.add("m-2");
+    // Show submit button & start button
+    if (timeLeft > 0) {
+        submitButton.classList.remove("d-none");
+        submitButton.classList.add("m-2");
+    }
     retakeButton.classList.remove("d-none");
+
+    // Change timer color to reflect result
+    if (timeLeft > 0) {
+        timer.classList.remove("bg-warning");
+        timer.classList.add("bg-success");
+    } else {
+        timer.classList.remove("bg-warning");
+        timer.classList.add("bg-danger");
+    }
 }
 
 // Quiz choices button listener
