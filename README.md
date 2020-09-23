@@ -3,6 +3,7 @@ This web application gives users a timed JavaScript coding quiz and records high
 
 ## Screenshot
 [View the deployed web application.](https://dandandanoneil.github.io/code-quiz/index.html)
+
 Landing Page:
 <img src="images/landing-page.png">
 
