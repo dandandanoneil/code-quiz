@@ -272,13 +272,13 @@ function choiceMade(event) {
     // If they got it wrong, take 10 seconds off their time & display the result
     if (userChoice != answer) {
         resultMessage.classList.add("w-100", "border", "bg-danger", "text-white", "rounded", "text-center", "mb-3")
-        resultMessage.innerText = "Incorrect";
+        resultMessage.innerText = "Wrong!";
         timeLeft -= 10;
         renderTime();
     } else {
         // If they got it right, display the result
         resultMessage.classList.add("w-100", "border", "bg-success", "text-white", "rounded", "text-center", "mb-3")
-        resultMessage.innerText = "Correct";
+        resultMessage.innerText = "Right!";
     }
 
     nextQuestion();
