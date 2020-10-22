@@ -28,4 +28,7 @@ I'm interested in developing this application in the following ways:
  - Adding new sets of question for other coding languages I've learned
  - Updating the CSS to make the design/layout more dynamic
 
+## License
+[MIT License](http://opensource.org/licenses/mit-license.php)
+
 > Written with [StackEdit](https://stackedit.io/).
